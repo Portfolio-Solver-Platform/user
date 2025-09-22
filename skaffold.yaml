@@ -22,7 +22,7 @@ profiles:
         releases:
           - name: user
             chartPath: helm
-            namespace: default
+            namespace: psp
             setValueTemplates:
               image: "{{.IMAGE_FULLY_QUALIFIED}}"
 
@@ -39,6 +39,7 @@ profiles:
         releases:
           - name: user
             chartPath: helm
+            namespace: psp
             setValueTemplates:
               image: "{{.IMAGE_FULLY_QUALIFIED}}"
             valuesFiles:
@@ -58,6 +59,7 @@ profiles:
         releases:
           - name: user
             chartPath: helm
+            namespace: psp
             setValueTemplates:
               image: "{{.IMAGE_FULLY_QUALIFIED}}"
             valuesFiles:
