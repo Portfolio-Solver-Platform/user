@@ -1,8 +1,6 @@
 from flask import Flask, jsonify
 from prometheus_flask_exporter import PrometheusMetrics
 import os
-import psycopg2
-from datetime import datetime
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)

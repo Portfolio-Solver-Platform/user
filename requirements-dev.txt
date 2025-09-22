@@ -79,8 +79,6 @@ prometheus-client==0.22.1
     # via prometheus-flask-exporter
 prometheus-flask-exporter==0.23.2
     # via user (pyproject.toml)
-psycopg2-binary==2.9.10
-    # via user (pyproject.toml)
 py-serializable==2.1.0
     # via cyclonedx-python-lib
 pygments==2.19.2

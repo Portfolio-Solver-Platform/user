@@ -26,7 +26,7 @@ profiles:
             setValueTemplates:
               image: "{{.IMAGE_FULLY_QUALIFIED}}"
 
-          
+
 
   - name: staging
     build:
