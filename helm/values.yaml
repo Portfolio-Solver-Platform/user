@@ -33,19 +33,19 @@ monitoringType: standard
 
 probes:
   liveness:
-    path: /
+    path: /healthz
     port: 8080
     initialDelaySeconds: 30 
     timeoutSeconds: 5
     periodSeconds: 10
     failureThreshold: 3
   readiness:
-    path: /
+    path: /readyz
     port: 8080
-    initialDelaySeconds: 5   
+    initialDelaySeconds: 5
     timeoutSeconds: 3
     periodSeconds: 5
-    failureThreshold: 2      
+    failureThreshold: 2
 
 
 pdb:
