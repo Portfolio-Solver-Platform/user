@@ -1,7 +1,4 @@
 from flask import Blueprint, jsonify
-import os
-import platform
-import flask
 from src.config import Config
 
 version_bp = Blueprint("version", __name__)

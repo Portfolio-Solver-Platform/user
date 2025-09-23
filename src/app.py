@@ -1,6 +1,3 @@
-from flask import Flask
-from prometheus_flask_exporter import PrometheusMetrics
-import os
 from . import create_app
 from .config import Config
 

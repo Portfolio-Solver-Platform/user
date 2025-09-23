@@ -12,6 +12,6 @@ def create_app():
     app.register_blueprint(health_bp)
     app.register_blueprint(metrics_bp)
     app.register_blueprint(version_bp)
-    app.register_blueprint(api_bp, url_prefix=f"/v1")
+    app.register_blueprint(api_bp, url_prefix=f"/{Config.Api.VERSION}")
 
     return app
