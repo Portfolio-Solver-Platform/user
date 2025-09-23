@@ -20,18 +20,18 @@ def readyz():
     return jsonify(status=status)
 
 
-def get_keycloak_ready_response() -> requests.Response | None:
-    url = f"http://{Config.Keycloak.HOST}/health/ready"
-    try:
-        return requests.get(url)
-    except ConnectionError:
-        return None
-
-
 def is_keycloak_ready() -> bool:
-    response = get_keycloak_ready_response()
+    response = try_get_keycloak_ready_response()
     if response is None:
         return False
 
     data = response.json()
     return data["status"] == "UP"
+
+
+def try_get_keycloak_ready_response() -> requests.Response | None:
+    url = f"http://{Config.Keycloak.HOST}/health/ready"
+    try:
+        return requests.get(url, timeout=Config.Keycloak.Timeout.READINESS)
+    except ConnectionError:
+        return None

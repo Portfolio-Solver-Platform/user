@@ -15,4 +15,8 @@ class Config:
         VERSION = "v1"
 
     class Keycloak:
-        HOST = "keycloak.keycloak.svc.cluster.local:9000"
+        HOST = "keycloak.keycloak.svc.cluster.local:9000"  # <svc>.<namespace>.svc.cluster.local:<port>
+
+        class Timeout:
+            DEFAULT = (1, 5)  # (connect timeout, read timeout)
+            READINESS = (1, 3)

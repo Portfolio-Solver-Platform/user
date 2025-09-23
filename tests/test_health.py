@@ -26,6 +26,6 @@ def assume_keycloak_ready_state(monkeypatch, is_ready: bool):
         )
 
     monkeypatch.setattr(
-        "src.blueprints.health.get_keycloak_ready_response",
+        "src.blueprints.health.try_get_keycloak_ready_response",
         fake_get_keycloak_ready_response,
     )
