@@ -1,16 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask
 from prometheus_flask_exporter import PrometheusMetrics
 import os
+from . import create_app
+from .config import Config
 
-app = Flask(__name__)
-metrics = PrometheusMetrics(app)
-
-
-@app.route("/", methods=["GET"])
-def root():
-    return jsonify(status="ok", service="user")
+app = create_app()
 
 
 if __name__ == "__main__":
-    debug_mode = os.getenv("FLASK_DEBUG", "False").lower() == "true"
-    app.run(host="127.0.0.1", port=5000, debug=debug_mode)
+    app.run(host=Config.Flask.HOST, port=Config.Flask.PORT, debug=Config.Flask.DEBUG)

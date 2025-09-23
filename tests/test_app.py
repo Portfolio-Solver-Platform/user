@@ -11,10 +11,9 @@ def client():
         yield client
 
 
-def test_root_endpoint(client):
-    """Test the root endpoint"""
-    response = client.get("/")
+def test_health_endpoint(client):
+    """Test the health endpoint"""
+    response = client.get("/healthz")
     assert response.status_code == 200
     data = response.get_json()
     assert data["status"] == "ok"
-    assert data["service"] == "user"
