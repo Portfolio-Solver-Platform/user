@@ -2,7 +2,7 @@ from src.config import Config
 
 
 def test_version_endpoint(client):
-    """Test the health endpoint"""
+    """Test the version endpoint"""
     response = client.get("/version")
     assert response.status_code == 200
     data = response.get_json()
