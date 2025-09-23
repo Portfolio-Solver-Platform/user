@@ -1,4 +1,7 @@
 from flask import Blueprint, jsonify
+from src.config import Config
+import requests
+from requests.exceptions import ConnectionError
 
 health_bp = Blueprint("health", __name__)
 
@@ -10,5 +13,25 @@ def healthz():
 
 @health_bp.route("/readyz")
 def readyz():
-    # TODO: Check whether Keycloak is ready
-    return jsonify(status="ready")
+    if is_keycloak_ready():
+        status = "ready"
+    else:
+        status = "not ready"
+    return jsonify(status=status)
+
+
+def get_keycloak_ready_response() -> requests.Response | None:
+    url = f"http://{Config.Keycloak.HOST}/health/ready"
+    try:
+        return requests.get(url)
+    except ConnectionError:
+        return None
+
+
+def is_keycloak_ready() -> bool:
+    response = get_keycloak_ready_response()
+    if response is None:
+        return False
+
+    data = response.json()
+    return data["status"] == "UP"
