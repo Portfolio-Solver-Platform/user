@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 from src.config import Config
 import requests
 from requests.exceptions import ConnectionError
+import src.keycloak
 
 health_bp = Blueprint("health", __name__)
 
@@ -30,7 +31,7 @@ def is_keycloak_ready() -> bool:
 
 
 def try_get_keycloak_ready_response() -> requests.Response | None:
-    url = f"http://{Config.Keycloak.HOST}/health/ready"
+    url = keycloak.url("/health/ready")
     try:
         return requests.get(url, timeout=Config.Keycloak.Timeout.READINESS)
     except ConnectionError:

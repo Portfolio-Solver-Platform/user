@@ -16,6 +16,9 @@ class Config:
 
     class Keycloak:
         HOST = "keycloak.keycloak.svc.cluster.local:9000"  # <svc>.<namespace>.svc.cluster.local:<port>
+        REALM = "master"
+        CLIENT_SECRET = os.getenv("KEYCLOAK_CLIENT_SECRET", None)
+        CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", None)
 
         class Timeout:
             DEFAULT = (1, 5)  # (connect timeout, read timeout)

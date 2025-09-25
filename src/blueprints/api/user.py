@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify
 
-route_bp = Blueprint("route", __name__)
+user_bp = Blueprint("user", __name__)
 
 
-@route_bp.route("/")
+@user_bp.route("/")
 def test_route():
     return jsonify(status="test")
