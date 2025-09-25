@@ -1,23 +1,32 @@
-from flask import Blueprint, jsonify
+from fastapi import APIRouter
 from src.config import Config
 import requests
 from requests.exceptions import ConnectionError
+from pydantic import BaseModel
 
-health_bp = Blueprint("health", __name__)
+router = APIRouter()
 
 
-@health_bp.route("/healthz")
+class HealthResponse(BaseModel):
+    status: str
+
+
+@router.get("/healthz", response_model=HealthResponse)
 def healthz():
-    return jsonify(status="ok")
+    return HealthResponse(status="ok")
 
 
-@health_bp.route("/readyz")
+class ReadyResponse(BaseModel):
+    status: str
+
+
+@router.get("/readyz", response_model=ReadyResponse)
 def readyz():
     if is_keycloak_ready():
         status = "ready"
     else:
         status = "not ready"
-    return jsonify(status=status)
+    return ReadyResponse(status=status)
 
 
 def is_keycloak_ready() -> bool:

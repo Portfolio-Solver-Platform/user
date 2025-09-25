@@ -1,8 +1,8 @@
-from . import create_app
+from fastapi import FastAPI
 from .config import Config
+from .routers import health, version
 
-app = create_app()
+app = FastAPI()
 
-
-if __name__ == "__main__":
-    app.run(host=Config.Flask.HOST, port=Config.Flask.PORT, debug=Config.Flask.DEBUG)
+app.include_router(health.router)
+app.include_router(version.router)
