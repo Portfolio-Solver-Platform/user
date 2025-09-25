@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from .config import Config
 from .routers import health, version
 import prometheus_fastapi_instrumentator
 
