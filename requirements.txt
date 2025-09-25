@@ -36,6 +36,8 @@ fastapi-cli==0.0.13
     # via fastapi
 fastapi-cloud-cli==0.2.0
     # via fastapi-cli
+gunicorn==23.0.0
+    # via user (pyproject.toml)
 h11==0.16.0
     # via
     #   httpcore
@@ -62,6 +64,8 @@ markupsafe==3.0.2
     # via jinja2
 mdurl==0.1.2
     # via markdown-it-py
+packaging==25.0
+    # via gunicorn
 prometheus-client==0.22.1
     # via prometheus-fastapi-instrumentator
 prometheus-fastapi-instrumentator==7.1.0

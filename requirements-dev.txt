@@ -52,6 +52,8 @@ fastapi-cloud-cli==0.2.0
     # via fastapi-cli
 filelock==3.19.1
     # via cachecontrol
+gunicorn==23.0.0
+    # via user (pyproject.toml)
 h11==0.16.0
     # via
     #   httpcore
@@ -88,6 +90,7 @@ packageurl-python==0.17.5
     # via cyclonedx-python-lib
 packaging==25.0
     # via
+    #   gunicorn
     #   pip-audit
     #   pip-requirements-parser
     #   pytest
