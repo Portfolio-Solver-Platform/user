@@ -4,7 +4,6 @@ from src.config import Config
 import requests
 from requests.exceptions import ConnectionError
 from pydantic import BaseModel
-from enum import Enum
 
 router = APIRouter()
 
