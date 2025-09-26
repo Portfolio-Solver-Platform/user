@@ -1,10 +1,17 @@
 from fastapi import FastAPI
+from .config import Config
 from .routers import health, version
 import prometheus_fastapi_instrumentator
 
-app = FastAPI()
+app = FastAPI(
+    debug=Config.App.DEBUG,
+    root_path=Config.Api.ROOT_PATH,
+    title=Config.Api.TITLE,
+    description=Config.Api.DESCRIPTION,
+    version=Config.App.VERSION,
+)
 
-app.include_router(health.router, tags=["Health", "Info"])
+app.include_router(health.router, tags=["Health"])
 app.include_router(version.router, tags=["Info"])
 
 # Monitoring

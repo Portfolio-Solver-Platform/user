@@ -155,7 +155,7 @@ rich-toolkit==0.15.1
     #   fastapi-cloud-cli
 rignore==0.6.4
     # via fastapi-cloud-cli
-ruff==0.12.12
+ruff==0.13.2
     # via user (pyproject.toml)
 sentry-sdk==2.39.0
     # via fastapi-cloud-cli
