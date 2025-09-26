@@ -17,3 +17,9 @@ app.include_router(api.router, tags=["Api"], prefix=f"/{Config.Api.VERSION}")
 
 # Monitoring
 prometheus_fastapi_instrumentator.Instrumentator().instrument(app).expose(app)
+
+# Exclude /metrics from schema
+for route in app.routes:
+    if route.path == "/metrics":
+        route.include_in_schema = False
+        break

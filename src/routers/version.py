@@ -19,6 +19,7 @@ class VersionResponse(BaseModel):
     "/version",
     response_model=VersionResponse,
     summary="Get information about the service",
+    include_in_schema=False,
 )
 def version():
     """

@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from typing import Literal
+from fastapi import APIRouter, HTTPException
 from src.config import Config
 import requests
 from requests.exceptions import ConnectionError
@@ -8,45 +9,41 @@ from enum import Enum
 router = APIRouter()
 
 
-class HealthStatus(str, Enum):
-    healthy = "ok"
-
-
 class HealthResponse(BaseModel):
-    status: HealthStatus
+    status: Literal["ok"]
 
 
 @router.get(
-    "/healthz", response_model=HealthResponse, summary="Get the health of the service"
+    "/healthz",
+    response_model=HealthResponse,
+    summary="Get the health of the service",
+    include_in_schema=False,
 )
 def healthz():
     """
     Get the health of the service.
     """
-    return HealthResponse(status=HealthStatus.healthy)
-
-
-class ReadyStatus(str, Enum):
-    ready = "ready"
-    not_ready = "not_ready"
+    return HealthResponse(status="ok")
 
 
 class ReadyResponse(BaseModel):
-    status: ReadyStatus
+    status: Literal["ready"]
 
 
 @router.get(
-    "/readyz", response_model=ReadyResponse, summary="Get whether the service is ready"
+    "/readyz",
+    response_model=ReadyResponse,
+    summary="Get whether the service is ready",
+    include_in_schema=False,
 )
 def readyz():
     """
     Get whether the service is ready to serve requests
     """
-    if is_keycloak_ready():
-        status = ReadyStatus.ready
-    else:
-        status = ReadyStatus.not_ready
-    return ReadyResponse(status=status)
+    if not is_keycloak_ready():
+        raise HTTPException(status_code=503, detail="Service is not ready")
+
+    return ReadyResponse(status="ready")
 
 
 def is_keycloak_ready() -> bool:
