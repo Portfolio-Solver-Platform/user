@@ -1,27 +1,32 @@
 from src.config import Config
 import requests
+from requests import Response
 
 
-def url(route: str):
+def url(route: str, is_management: bool = False) -> str:
     assert route.startswith("/"), "Route should start with '/'"
-    return f"http://{Config.Keycloak.HOST}{route}"
+    port = Config.Keycloak.MANAGEMENT_PORT if is_management else Config.Keycloak.PORT
+    return f"http://{Config.Keycloak.HOST}:{port}{route}"
 
 
-def realm_url(realm: str, route: str):
+def realm_url(realm: str, route: str) -> str:
     assert route.startswith("/"), "Route should start with '/'"
-    url(f"/realms/{realm}{route}")
+    return url(f"/realms/{realm}{route}")
 
 
-def oic_url(realm: str, route: str):
+def oic_url(realm: str, route: str) -> str:
     assert route.startswith("/"), "Route should start with '/'"
-    realm_url(realm, f"/protocol/openid-connect{route}")
+    return realm_url(realm, f"/protocol/openid-connect{route}")
 
 
-def send_ready_request():
-    return requests.get(url("/health/ready"), timeout=Config.Keycloak.Timeout.READINESS)
+def send_ready_request() -> Response:
+    return requests.get(
+        url("/health/ready", is_management=True),
+        timeout=Config.Keycloak.Timeout.READINESS,
+    )
 
 
-def send_login_request(username: str, password: str):
+def send_login_request(username: str, password: str) -> Response:
     url = oic_url(Config.Keycloak.REALM, "/token")
     data = {
         "client_id": Config.Keycloak.CLIENT_ID,

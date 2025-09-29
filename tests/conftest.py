@@ -9,3 +9,14 @@ def client():
     """Test client"""
     with TestClient(app) as client:
         yield client
+
+
+@pytest.fixture
+def config():
+    """Test configuration"""
+    yield TestConfig()
+
+
+class TestConfig:
+    class Gateway:
+        BASE_URL = "http://local"

@@ -4,6 +4,7 @@ from src.config import Config
 import requests
 from requests.exceptions import ConnectionError
 from pydantic import BaseModel
+from src import keycloak
 
 router = APIRouter()
 
@@ -55,8 +56,7 @@ def is_keycloak_ready() -> bool:
 
 
 def try_get_keycloak_ready_response() -> requests.Response | None:
-    url = f"http://{Config.Keycloak.HOST}/health/ready"
     try:
-        return requests.get(url, timeout=Config.Keycloak.Timeout.READINESS)
+        return keycloak.send_ready_request()
     except ConnectionError:
         return None
