@@ -1,4 +1,5 @@
 from src.config import Config
+import requests
 
 
 def url(route: str):
@@ -8,7 +9,7 @@ def url(route: str):
 
 def realm_url(realm: str, route: str):
     assert route.startswith("/"), "Route should start with '/'"
-    url(f"/realms/{REALM}{route}")
+    url(f"/realms/{realm}{route}")
 
 
 def oic_url(realm: str, route: str):
@@ -30,7 +31,7 @@ def send_login_request(username: str, password: str):
         "password": password,
     }
 
-    return requests.post(url, data=data)
+    return requests.post(url, data=data, timeout=Config.Keycloak.Timeout.DEFAULT)
 
 
 def send_logout_request():
