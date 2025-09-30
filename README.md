@@ -2,6 +2,8 @@
 
 Service that handles user credentials, sessions and permissions.
 
+API documentation can be found on the `/docs` route.
+
 ## Usage 
 
 Use `skaffold run -p prod` for production settings or `skaffold dev` for development settings.
