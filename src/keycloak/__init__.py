@@ -4,13 +4,15 @@ from requests import Response
 
 
 def url(route: str, is_management: bool = False) -> str:
-    assert route.startswith("/"), "Route should start with '/'"
+    if not route.startswith("/"):
+        raise ValueError("Route should start with '/'")
     port = Config.Keycloak.MANAGEMENT_PORT if is_management else Config.Keycloak.PORT
     return f"{Config.Keycloak.SCHEME}://{Config.Keycloak.HOST}:{port}{route}"
 
 
 def realm_url(realm: str, route: str) -> str:
-    assert route.startswith("/"), "Route should start with '/'"
+    if not route.startswith("/"):
+        raise ValueError("Route should start with '/'")
     return url(f"/realms/{realm}{route}")
 
 
