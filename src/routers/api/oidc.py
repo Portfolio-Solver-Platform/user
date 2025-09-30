@@ -38,6 +38,7 @@ def update_well_known_for_intra(data: any):
             logger.error(
                 f"Failed to replace public endpoint with intra-cluster endpoint: {endpoint} not found in the .well-known data"
             )
+            continue
 
         public_url = data[endpoint]
         parsed_url = urlparse(public_url)
