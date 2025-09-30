@@ -1,4 +1,5 @@
 from src.config import Config
+from tests.common import api_path
 from tests.conftest import TestConfig
 
 
@@ -9,4 +10,4 @@ def url(path: str):
 
 def api_url(path: str):
     assert path.startswith("/")
-    return url(f"/{Config.Api.VERSION}{path}")
+    return url(api_path(path))
