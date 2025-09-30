@@ -2,7 +2,9 @@
 
 Service that handles user credentials, sessions and permissions.
 
-API documentation can be found on the `/docs` route.
+Routes:
+- `/docs` shows public API documentation.
+- `/v1/.well-known/intra` gives OpenID Connect `.well-known` configuration for internal services. This endpoint uses internal cluster communication. In contrast, the public `/v1/.well-known` route provides URLs that go through the gateway.
 
 ## Usage 
 
