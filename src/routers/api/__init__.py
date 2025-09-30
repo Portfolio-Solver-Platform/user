@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from . import route
+from . import oidc
 
 router = APIRouter()
 
-router.include_router(route.router)
+router.include_router(oidc.router, tags=["OpenID Connect"])

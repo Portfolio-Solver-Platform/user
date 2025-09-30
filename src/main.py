@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI
 from .config import Config
 from .routers import health, version, api
