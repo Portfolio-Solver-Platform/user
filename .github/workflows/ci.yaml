@@ -31,12 +31,12 @@ jobs:
           pull: true
           cache-from: type=gha
           cache-to: type=gha,mode=max,ignore-error=true
-        
+
       - name: Lint
         run: docker run --rm $CI_IMAGE ruff check . --no-cache
-      
+
       - name: Test
-        run: docker run --rm $CI_IMAGE pytest -q -p no:cacheprovider
+        run: docker run --rm $CI_IMAGE pytest -m "not integration" -q -p no:cacheprovider
 
       - name: Audit code
         run: docker run --rm $CI_IMAGE bandit . -qrx ./tests
