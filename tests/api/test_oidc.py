@@ -2,7 +2,7 @@ import pytest
 import json
 import requests
 import copy
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse
 from unittest.mock import Mock
 from tests.common.integration import api_url
 from tests.common import api_path
@@ -33,9 +33,6 @@ def test_well_known_intra(client, monkeypatch):
 
     intra_data = response.json()
 
-    keycloak_intra_url = (
-        f"{Config.Keycloak.SCHEME}://{Config.Keycloak.HOST}:{Config.Keycloak.PORT}"
-    )
     endpoints = [
         "token_endpoint",
         "introspection_endpoint",

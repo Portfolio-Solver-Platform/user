@@ -1,8 +1,6 @@
 from src.logging import logger
-from src.config import Config
 from fastapi import APIRouter
 from src import keycloak
-from pydantic import BaseModel
 from urllib.parse import urlparse, urlunparse
 
 router = APIRouter()

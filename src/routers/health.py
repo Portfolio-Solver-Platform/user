@@ -1,6 +1,5 @@
 from typing import Literal
 from fastapi import APIRouter, HTTPException
-from src.config import Config
 import requests
 from requests.exceptions import ConnectionError
 from pydantic import BaseModel
