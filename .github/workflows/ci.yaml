@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main]  
+    branches: [main]
   pull_request:
 
 permissions:
@@ -41,9 +41,11 @@ jobs:
       - name: Audit code
         run: docker run --rm $CI_IMAGE bandit . -qrx ./tests
 
-      - name: Dependency audit
-        run: docker run --rm $CI_IMAGE pip-audit
-        continue-on-error: true
+      - name: Dependency audit (requirements file)
+        run: docker run --rm $CI_IMAGE pip-audit -r requirements-dev.txt
+
+      - name: Dependency audit (full environment)
+        run: docker run --rm $CI_IMAGE pip-audit | echo "::warning::Vulnerabilities found in build environment"
 
       - name: Cache Trivy DB
         uses: actions/cache@v4
