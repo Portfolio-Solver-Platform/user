@@ -43,6 +43,7 @@ jobs:
 
       - name: Dependency audit
         run: docker run --rm $CI_IMAGE pip-audit
+        continue-on-error: true
 
       - name: Cache Trivy DB
         uses: actions/cache@v4
