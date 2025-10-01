@@ -47,7 +47,7 @@ jobs:
       - name: Dependency audit (full environment)
         run: |
           docker run --rm ${{ env.CI_IMAGE }} pip-audit \
-          || echo "::warning file=requirements.txt,line=1,title=Dependency Vulnerabilities Found::Pip-audit found vulnerabilities in your dependencies. Please check the CI logs for this step for a detailed report."
+          || echo "::warning title=Dependency Vulnerabilities Found::Pip-audit found vulnerabilities in your dependencies. Please check the CI logs for this step for a detailed report."
 
       - name: Cache Trivy DB
         uses: actions/cache@v4
