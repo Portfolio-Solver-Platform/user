@@ -11,10 +11,11 @@ from src.config import Config
 
 @pytest.mark.integration
 def test_well_known(client):
-    response = requests.get(api_url("/.well-known"))
+    response = requests.get(api_url("/.well-known/openid-configuration"))
     assert response.status_code == 200
     data = response.json()
 
+    assert "issuer" in data
     assert "authorization_endpoint" in data
     assert "token_endpoint" in data
     assert "introspection_endpoint" in data
@@ -23,17 +24,18 @@ def test_well_known(client):
     assert "jwks_uri" in data
 
 
-def test_well_known_intra(client, monkeypatch):
+def test_well_known_internal(client, monkeypatch):
     fake_response = mock_keycloak_well_known_response(monkeypatch)
     original_data = copy.deepcopy(fake_response.json.return_value)
 
-    response = client.get(api_path("/.well-known/intra"))
+    response = client.get(api_path("/.well-known/openid-configuration/internal"))
     assert response.status_code == 200
     fake_response.json.assert_called_once()
 
     intra_data = response.json()
 
     endpoints = [
+        "issuer",
         "token_endpoint",
         "introspection_endpoint",
         "userinfo_endpoint",
