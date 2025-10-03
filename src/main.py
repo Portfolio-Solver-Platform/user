@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from .config import Config
 from .routers import health, version, api
+from .auth import auth
 import prometheus_fastapi_instrumentator
 
 app = FastAPI(
@@ -10,6 +11,8 @@ app = FastAPI(
     description=Config.Api.DESCRIPTION,
     version=Config.App.VERSION,
 )
+
+auth.enable(app, "some-random-string")
 
 app.include_router(health.router, tags=["Health"])
 app.include_router(version.router, tags=["Info"])
