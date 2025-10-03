@@ -11,6 +11,8 @@ anyio==4.11.0
     #   httpx
     #   starlette
     #   watchfiles
+authlib==1.6.5
+    # via user (pyproject.toml)
 bandit==1.8.6
     # via user (pyproject.toml)
 boolean-py==5.0
@@ -25,6 +27,8 @@ certifi==2025.8.3
     #   httpx
     #   requests
     #   sentry-sdk
+cffi==2.0.0
+    # via cryptography
 charset-normalizer==3.4.3
     # via requests
 click==8.2.1
@@ -34,6 +38,8 @@ click==8.2.1
     #   uvicorn
 coverage==7.10.6
     # via pytest-cov
+cryptography==46.0.2
+    # via authlib
 cyclonedx-python-lib==9.1.0
     # via pip-audit
 defusedxml==0.7.1
@@ -66,6 +72,7 @@ httpx==0.28.1
     # via
     #   fastapi
     #   fastapi-cloud-cli
+    #   user (pyproject.toml)
 idna==3.10
     # via
     #   anyio
@@ -74,6 +81,8 @@ idna==3.10
     #   requests
 iniconfig==2.1.0
     # via pytest
+itsdangerous==2.2.0
+    # via user (pyproject.toml)
 jinja2==3.1.6
     # via fastapi
 license-expression==30.4.4
@@ -112,6 +121,8 @@ prometheus-fastapi-instrumentator==7.1.0
     # via user (pyproject.toml)
 py-serializable==2.1.0
     # via cyclonedx-python-lib
+pycparser==2.23
+    # via cffi
 pydantic==2.11.9
     # via
     #   fastapi
