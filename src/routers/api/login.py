@@ -17,6 +17,7 @@ async def login(request: Request):
 
 @router.get("/auth")
 async def login_auth(request: Request):
+    print("===== AUTH")
     token = await auth.client().authorize_access_token(request)
     print(token)
     user = token["userinfo"]

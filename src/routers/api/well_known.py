@@ -39,10 +39,30 @@ def well_known_intra():
 KEYCLOAK_INTRA_URL = keycloak.url("/")
 
 
-def remove_well_known_ports(data: any):
+def remove_well_known_ports(data: dict):
+    for key, value in data.items():
+        if isinstance(value, str) and (
+            key.endswith("_endpoint")
+            or key == "issuer"
+            or key == "jwks_uri"
+            or key == "check_session_iframe"
+        ):
+            data[key] = remove_port(value)
+
+        if isinstance(value, dict):
+            remove_well_known_ports(data[key])
+
+
+def remove_port(value: str):
+    parsed_url = urlparse(value)
+    new_url_parts = parsed_url._replace(
+        netloc=parsed_url.hostname,  # Remove the port
+    )
+    return urlunparse(new_url_parts)
+
+
+def update_well_known_for_internal(data: dict):
     endpoints_to_modify = [
-        "issuer",
-        "authorization_endpoint",
         "token_endpoint",
         "introspection_endpoint",
         "userinfo_endpoint",
@@ -50,30 +70,8 @@ def remove_well_known_ports(data: any):
         "jwks_uri",
     ]
 
-    for endpoint in endpoints_to_modify:
-        if endpoint not in data:
-            logger.error(
-                f"Failed to remove port from .well-known: {endpoint} not found in the .well-known data"
-            )
-            continue
-
-        public_url = data[endpoint]
-        parsed_url = urlparse(public_url)
-        new_url_parts = parsed_url._replace(
-            netloc=parsed_url.hostname,  # Remove the port
-        )
-        data[endpoint] = urlunparse(new_url_parts)
-
-
-def update_well_known_for_internal(data: any):
-    endpoints_to_modify = [
-        "issuer",
-        "token_endpoint",
-        "introspection_endpoint",
-        "userinfo_endpoint",
-        "end_session_endpoint",
-        "jwks_uri",
-    ]
+    data["issuer"] = remove_port(data["issuer"])
+    data["authorization_endpoint"] = remove_port(data["authorization_endpoint"])
 
     for endpoint in endpoints_to_modify:
         if endpoint not in data:
