@@ -1,4 +1,5 @@
 from src.logging import logger
+from typing import Callable
 from fastapi import APIRouter
 from src import keycloak
 from urllib.parse import urlparse, urlunparse
@@ -39,7 +40,7 @@ def well_known_intra():
 KEYCLOAK_INTRA_URL = keycloak.url("/")
 
 
-def remove_well_known_ports(data: dict):
+def map_each_endpoint(data: dict, f: Callable[[str], str]):
     for key, value in data.items():
         if isinstance(value, str) and (
             key.endswith("_endpoint")
@@ -47,13 +48,17 @@ def remove_well_known_ports(data: dict):
             or key == "jwks_uri"
             or key == "check_session_iframe"
         ):
-            data[key] = remove_port(value)
+            data[key] = f(value)
 
         if isinstance(value, dict):
-            remove_well_known_ports(data[key])
+            map_each_endpoint(data[key], f)
 
 
-def remove_port(value: str):
+def remove_well_known_ports(data: dict):
+    map_each_endpoint(data, remove_port)
+
+
+def remove_port(value: str) -> str:
     parsed_url = urlparse(value)
     new_url_parts = parsed_url._replace(
         netloc=parsed_url.hostname,  # Remove the port
@@ -62,28 +67,19 @@ def remove_port(value: str):
 
 
 def update_well_known_for_internal(data: dict):
-    endpoints_to_modify = [
-        "token_endpoint",
-        "introspection_endpoint",
-        "userinfo_endpoint",
-        "end_session_endpoint",
-        "jwks_uri",
-    ]
+    auth_endpoint = remove_port(data["authorization_endpoint"])
+    issuer = remove_port(data["issuer"])
 
-    data["issuer"] = remove_port(data["issuer"])
-    data["authorization_endpoint"] = remove_port(data["authorization_endpoint"])
+    map_each_endpoint(data, replace_host_with_internal_keycloak)
 
-    for endpoint in endpoints_to_modify:
-        if endpoint not in data:
-            logger.error(
-                f"Failed to replace public endpoint with intra-cluster endpoint: {endpoint} not found in the .well-known data"
-            )
-            continue
+    data["authorization_endpoint"] = auth_endpoint
+    data["issuer"] = issuer
 
-        public_url = data[endpoint]
-        parsed_url = urlparse(public_url)
-        new_url_parts = parsed_url._replace(
-            netloc=urlparse(KEYCLOAK_INTRA_URL).netloc,
-            scheme=urlparse(KEYCLOAK_INTRA_URL).scheme,
-        )
-        data[endpoint] = urlunparse(new_url_parts)
+
+def replace_host_with_internal_keycloak(url: str) -> str:
+    parsed_url = urlparse(url)
+    new_url_parts = parsed_url._replace(
+        netloc=urlparse(KEYCLOAK_INTRA_URL).netloc,
+        scheme=urlparse(KEYCLOAK_INTRA_URL).scheme,
+    )
+    return urlunparse(new_url_parts)
