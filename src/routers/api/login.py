@@ -17,8 +17,12 @@ async def login(request: Request):
 
 @router.get("/auth")
 async def login_auth(request: Request):
-    print("===== AUTH")
     token = await auth.client().authorize_access_token(request)
-    print(token)
     user = token["userinfo"]
-    return dict(user)
+    return dict(token)
+
+
+@router.get("/test")
+async def auth_test(request: Request):
+    token = auth.get_token(request)
+    return {"claims": token.claims, "header": token.header}
