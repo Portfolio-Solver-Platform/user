@@ -14,7 +14,7 @@ class Config:
         ROOT_PATH = "/api/user"
 
     class Keycloak:
-        HOST = "keycloak.keycloak.svc.cluster.local"  # <svc>.<namespace>.svc.cluster.local:<port>
+        HOST = "keycloak-service.keycloak.svc.cluster.local"  # <svc>.<namespace>.svc.cluster.local:<port>
         SCHEME = "http"
         PORT = 8080
         MANAGEMENT_PORT = 9000

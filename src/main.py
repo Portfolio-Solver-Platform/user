@@ -12,11 +12,11 @@ app = FastAPI(
     version=Config.App.VERSION,
 )
 
-auth.enable(app, "some-random-string")
-
 app.include_router(health.router, tags=["Health"])
 app.include_router(version.router, tags=["Info"])
 app.include_router(api.router, prefix=f"/{Config.Api.VERSION}")
+
+auth.add_docs(app)
 
 # Monitoring
 prometheus_fastapi_instrumentator.Instrumentator().instrument(app).expose(app)

@@ -1,4 +1,3 @@
-from src.logging import logger
 from typing import Callable
 from fastapi import APIRouter
 from src import keycloak
