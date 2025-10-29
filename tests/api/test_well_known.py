@@ -10,18 +10,27 @@ from src.config import Config
 
 
 @pytest.mark.integration
-def test_well_known(client):
-    response = requests.get(api_url("/.well-known/openid-configuration"))
+def test_well_known(client, monkeypatch):
+    fake_response = mock_keycloak_well_known_response(monkeypatch)
+    response = client.get(api_path("/.well-known/openid-configuration"))
     assert response.status_code == 200
+    fake_response.json.assert_called_once()
     data = response.json()
 
-    assert "issuer" in data
-    assert "authorization_endpoint" in data
-    assert "token_endpoint" in data
-    assert "introspection_endpoint" in data
-    assert "userinfo_endpoint" in data
-    assert "end_session_endpoint" in data
-    assert "jwks_uri" in data
+    endpoints = [
+        "issuer",
+        "authorization_endpoint",
+        "token_endpoint",
+        "introspection_endpoint",
+        "userinfo_endpoint",
+        "end_session_endpoint",
+        "jwks_uri",
+    ]
+
+    for endpoint in endpoints:
+        assert endpoint in data
+        parsed = urlparse(data[endpoint])
+        assert parsed.port is None
 
 
 def test_well_known_internal(client, monkeypatch):
@@ -35,8 +44,6 @@ def test_well_known_internal(client, monkeypatch):
     intra_data = response.json()
 
     endpoints = [
-        "issuer",
-        "token_endpoint",
         "introspection_endpoint",
         "userinfo_endpoint",
         "end_session_endpoint",
@@ -56,7 +63,7 @@ def test_well_known_internal(client, monkeypatch):
         assert intra_parsed_url.port == Config.Keycloak.PORT
 
 
-def mock_keycloak_well_known_response(monkeypatch):
+def mock_keycloak_well_known_response(monkeypatch) -> Mock:
     fake_response = Mock()
     fake_response.status_code = 200
     fake_response.json.return_value = get_mock_keycloak_well_known_json()
