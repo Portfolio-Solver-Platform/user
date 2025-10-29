@@ -14,11 +14,11 @@ class Config:
         ROOT_PATH = "/api/user"
 
     class Keycloak:
-        HOST = "keycloak.keycloak.svc.cluster.local"  # <svc>.<namespace>.svc.cluster.local:<port>
+        HOST = "keycloak-service.keycloak.svc.cluster.local"  # <svc>.<namespace>.svc.cluster.local
         SCHEME = "http"
         PORT = 8080
         MANAGEMENT_PORT = 9000
-        REALM = "master"
+        REALM = "psp"
         CLIENT_ID = "user-service"
         CLIENT_SECRET = os.getenv(
             "KEYCLOAK_CLIENT_SECRET", "9lloVQCFgkEUfJINZ6jpasDWW13EbYcm"
