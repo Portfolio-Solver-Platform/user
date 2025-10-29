@@ -1,10 +1,8 @@
 import pytest
 import json
-import requests
 import copy
 from urllib.parse import urlparse
 from unittest.mock import Mock
-from tests.common.integration import api_url
 from tests.common import api_path
 from src.config import Config
 
