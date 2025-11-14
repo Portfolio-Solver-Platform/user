@@ -35,7 +35,7 @@ def test_well_known_internal(client, monkeypatch):
     fake_response = mock_keycloak_well_known_response(monkeypatch)
     original_data = copy.deepcopy(fake_response.json.return_value)
 
-    response = client.get(api_path("/.well-known/openid-configuration/internal"))
+    response = client.get(api_path("/internal/.well-known/openid-configuration"))
     assert response.status_code == 200
     fake_response.json.assert_called_once()
 
