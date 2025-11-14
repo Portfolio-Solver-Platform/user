@@ -27,7 +27,7 @@ def well_known():
     return data
 
 
-@router.get("/.well-known/openid-configuration/internal", include_in_schema=False)
+@router.get("/internal/.well-known/openid-configuration", include_in_schema=False)
 def well_known_intra():
     response = keycloak.send_well_known_request()
     response.raise_for_status()
