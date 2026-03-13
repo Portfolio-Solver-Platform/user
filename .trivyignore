@@ -1,0 +1,2 @@
+# glibc integer overflow in memalign - no Debian fix available
+CVE-2026-0861
