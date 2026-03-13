@@ -2,11 +2,11 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   ci:
-    uses: ./.github/workflows/ci.yml
+    uses: ./.github/workflows/ci.yaml
 
   push:
     needs: ci
