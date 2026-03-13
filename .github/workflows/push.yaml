@@ -31,7 +31,7 @@ jobs:
 
       - name: Generate Tags
         run: |
-          TAGS="${{ env.BUILD_TAG }}"
+          TAGS="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}"
 
           if [ "$GITHUB_REF_NAME" == "${{ env.MAIN_BRANCH_NAME }}" ]; then
             TAGS="$TAGS,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
