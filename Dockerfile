@@ -6,6 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN useradd -u 10001 -m appuser
 
+# Upgrade pip to fix vulnerability
+RUN pip install --no-cache-dir --upgrade pip==26.0
+
 WORKDIR /home/appuser/app
 
 COPY requirements.txt .
