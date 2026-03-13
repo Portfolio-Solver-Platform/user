@@ -2,9 +2,9 @@
 name = "user"
 version = "0.1.0"
 dependencies = [
-    "fastapi[standard]>=0.120.1,<0.121",
+    "fastapi[standard]>=0.135,<0.136",
     "prometheus-fastapi-instrumentator>=7.1.0,<8.0",
-    "gunicorn>=23.0,<24.0",
+    "gunicorn>=25.0,<26.0",
     "requests>=2.32.5,<3.0",
 
     "httpx>=0.28.1,<0.29.0",
@@ -13,7 +13,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8,<9",
+    "pytest>=9,<10",
     "pytest-cov>=7,<8",
     "ruff>=0.13.2,<0.14.0",
     "bandit>=1.7,<2.0",
