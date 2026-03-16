@@ -3,6 +3,7 @@ name: Publish Docker image
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   ci:
@@ -18,6 +19,7 @@ jobs:
     env:
       REGISTRY: ghcr.io/portfolio-solver-platform
       IMAGE_NAME: user
+      FILE_NAME: user-service.yaml
       MAIN_BRANCH_NAME: main
 
     steps:
@@ -31,13 +33,15 @@ jobs:
 
       - name: Generate Tags
         run: |
-          TAGS="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}"
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}"
+          TAGS="${{ env.IMAGE }}"
 
           if [ "$GITHUB_REF_NAME" == "${{ env.MAIN_BRANCH_NAME }}" ]; then
             TAGS="$TAGS,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
             echo "Building from main branch. 'latest' tag will be applied."
           fi
 
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
           echo "DOCKER_TAGS=$TAGS" >> $GITHUB_ENV
 
       - name: Checkout repository
@@ -62,3 +66,35 @@ jobs:
           tags: ${{ env.DOCKER_TAGS }}
           cache-from: type=gha
           cache-to: type=gha,mode=max,ignore-error=true
+
+
+      - name: Generate app token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.INFRASTRUCTURE_BOT_ID }}
+          private-key: ${{ secrets.INFRASTRUCTURE_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: infrastructure
+
+      - name: Checkout infrastructure repo
+        uses: actions/checkout@v4
+        with:
+          repository: Portfolio-Solver-Platform/infrastructure
+          token: ${{ steps.app-token.outputs.token }}
+          path: infrastructure
+
+      - name: Update image tag in manifests
+        run: |
+          cd infrastructure/apps/base/
+          yq -i ".spec.values.image = \"$IMAGE\"" ${{ env.FILE_NAME }}
+
+      - name: Commit and push changes
+        run: |
+          cd infrastructure
+          git config user.name "infrastructure-bot[bot]"
+          git config user.email "infrastructure-bot[bot]@users.noreply.github.com"
+
+          git add .
+          git diff-index --quiet HEAD || git commit -m "chore($IMAGE_NAME): update $IMAGE_NAME image to ${{ env.BUILD_TAG }}"
+          git push
