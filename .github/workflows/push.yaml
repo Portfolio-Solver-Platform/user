@@ -76,6 +76,7 @@ jobs:
           private-key: ${{ secrets.INFRASTRUCTURE_BOT_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
           repositories: infrastructure
+          ref: wip-flux
 
       - name: Checkout infrastructure repo
         uses: actions/checkout@v4
