@@ -19,7 +19,7 @@ jobs:
     env:
       REGISTRY: ghcr.io/portfolio-solver-platform
       IMAGE_NAME: user
-      FILE_NAME: user-service.yaml
+      FILE_NAME: user.yaml
       MAIN_BRANCH_NAME: main
 
     steps:
