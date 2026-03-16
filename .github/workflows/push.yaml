@@ -34,7 +34,7 @@ jobs:
       - name: Generate Tags
         run: |
           IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}"
-          TAGS="${{ env.IMAGE }}"
+          TAGS="$IMAGE"
 
           if [ "$GITHUB_REF_NAME" == "${{ env.MAIN_BRANCH_NAME }}" ]; then
             TAGS="$TAGS,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
@@ -76,7 +76,6 @@ jobs:
           private-key: ${{ secrets.INFRASTRUCTURE_BOT_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
           repositories: infrastructure
-          ref: wip-flux
 
       - name: Checkout infrastructure repo
         uses: actions/checkout@v4
@@ -84,6 +83,7 @@ jobs:
           repository: Portfolio-Solver-Platform/infrastructure
           token: ${{ steps.app-token.outputs.token }}
           path: infrastructure
+          ref: wip-flux
 
       - name: Update image tag in manifests
         run: |
