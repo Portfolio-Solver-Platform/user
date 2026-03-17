@@ -20,6 +20,6 @@ jobs:
     with:
       image_name: 'user'
       file_name: 'user.yaml'
-      infrastructure_bot_id: ${{ vars.INFRASTRUCTURE_BOT_ID }}
+      infrastructure_bot_id: ${{ vars.INFRASTRUCTURE_BOT_APP_ID }}
     secrets:
       infrastructure_bot_private_key: ${{ secrets.INFRASTRUCTURE_BOT_PRIVATE_KEY }}
