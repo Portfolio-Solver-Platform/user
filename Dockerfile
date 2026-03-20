@@ -1,35 +1,37 @@
 
 FROM python:3.13-slim AS base
 
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 
+    PYTHONUNBUFFERED=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
 
 RUN useradd -u 10001 -m appuser
 
-# Upgrade pip to fix vulnerability
-RUN pip install --no-cache-dir --upgrade pip==26.0
-
 WORKDIR /home/appuser/app
 
-COPY requirements.txt .
-COPY requirements-dev.txt .
-
 USER 10001
-ENV PATH="/home/appuser/.local/bin:${PATH}"
+ENV PATH="/home/appuser/app/.venv/bin:${PATH}"
+
+COPY --chown=10001:10001 pyproject.toml .
+COPY --chown=10001:10001 uv.lock .
 
 
 FROM base AS dev
-RUN pip install --no-cache-dir --user -r requirements-dev.txt
-COPY pyproject.toml .
-COPY src/ ./src/
-COPY tests/ ./tests/
+RUN uv sync --frozen --no-install-project
+COPY --chown=10001:10001 src/ ./src/
+COPY --chown=10001:10001 tests/ ./tests/
+RUN uv sync --frozen
 EXPOSE 8080
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "-k", "uvicorn.workers.UvicornWorker", "src.main:app"]
 
 FROM base AS runtime
-RUN pip install --no-cache-dir --user -r requirements.txt
-COPY pyproject.toml .
-COPY src/ ./src/
+RUN uv sync --frozen --no-dev --no-install-project
+COPY --chown=10001:10001 src/ ./src/
+RUN uv sync --frozen --no-dev
 EXPOSE 8080
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "4", "-k", "uvicorn.workers.UvicornWorker", "src.main:app"]
 
