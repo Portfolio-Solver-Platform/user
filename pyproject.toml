@@ -1,6 +1,7 @@
 [project]
 name = "user"
 version = "0.1.0"
+requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.135,<0.136",
     "prometheus-fastapi-instrumentator>=7.1.0,<8.0",
@@ -11,7 +12,7 @@ dependencies = [
     "itsdangerous>=2.2.0,<3.0",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=9,<10",
     "pytest-cov>=7,<8",
