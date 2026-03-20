@@ -13,7 +13,6 @@ RUN useradd -u 10001 -m appuser
 
 WORKDIR /home/appuser/app
 
-USER 10001
 ENV PATH="/home/appuser/app/.venv/bin:${PATH}"
 
 COPY --chown=10001:10001 pyproject.toml .
@@ -25,6 +24,7 @@ RUN uv sync --frozen --no-install-project
 COPY --chown=10001:10001 src/ ./src/
 COPY --chown=10001:10001 tests/ ./tests/
 RUN uv sync --frozen
+USER 10001
 EXPOSE 8080
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "-k", "uvicorn.workers.UvicornWorker", "src.main:app"]
 
@@ -32,6 +32,7 @@ FROM base AS runtime
 RUN uv sync --frozen --no-dev --no-install-project
 COPY --chown=10001:10001 src/ ./src/
 RUN uv sync --frozen --no-dev
+USER 10001
 EXPOSE 8080
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "4", "-k", "uvicorn.workers.UvicornWorker", "src.main:app"]
 
