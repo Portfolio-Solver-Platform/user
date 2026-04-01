@@ -4,7 +4,8 @@ Service that handles user credentials, sessions and permissions.
 
 Routes:
 - `/docs` shows public API documentation.
-- `/v1/.well-known/intra` gives OpenID Connect `.well-known` configuration for internal services. This endpoint uses internal cluster communication. In contrast, the public `/v1/.well-known` route provides URLs that go through the gateway.
+- `/v1/.well-known/openid-configuration` gives OpenID Connect `.well-known` configuration that provides public URLs.
+- `/v1/internal/.well-known/openid-configuration` gives OpenID Connect `.well-known` configuration for internal services that provides URLs for internal cluster communication.
 
 ## Usage 
 
