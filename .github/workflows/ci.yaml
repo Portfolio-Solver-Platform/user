@@ -18,10 +18,10 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
 
       - name: Install environment
-        run: nix develop .#ci
+        run: nix develop .#checks
 
       - name: Run checks
-        run: nix develop .#ci --command pre-commit run -a
+        run: nix develop .#checks --command pre-commit run -a
 
   ci:
     needs: validate

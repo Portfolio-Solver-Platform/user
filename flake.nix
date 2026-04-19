@@ -44,12 +44,6 @@
             markdownlint.enable = true;
           };
         };
-
-        ciPackages = with pkgs; [
-          pkgs.nodejs_24
-          kubernetes-helm
-          yq-go
-        ];
       in
       {
         formatter = pkgs.writeShellScriptBin "format-all" ''
@@ -64,20 +58,25 @@
         '';
 
         devShells = {
-          ci = pkgs.mkShell {
-            inherit (preCommitCheck) shellHook;
-            packages = ciPackages;
-          };
-
           default = pkgs.mkShell {
             inherit (preCommitCheck) shellHook;
-            packages =
-              ciPackages
-              ++ (with pkgs; [
-                kubernetes-helm
-                (python3.withPackages (ps: with ps; [ requests ]))
-                skaffold
-              ]);
+            packages = with pkgs; [
+              kubernetes-helm
+              (python3.withPackages (ps: with ps; [ requests ]))
+              skaffold
+            ];
+          };
+
+          checks = pkgs.mkShell {
+            inherit (preCommitCheck) shellHook;
+          };
+
+          release = pkgs.mkShell {
+            packages = with pkgs; [
+              pkgs.nodejs_24
+              kubernetes-helm
+              yq-go
+            ];
           };
         };
       }
