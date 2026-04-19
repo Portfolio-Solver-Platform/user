@@ -33,6 +33,8 @@
           src = ./.;
           hooks = {
             nixfmt.enable = true;
+            check-merge-conflicts.enable = true;
+            hadolint.enable = true; # Dockerfile linting
             trufflehog.enable = true;
             actionlint.enable = true;
             shellcheck.enable = true;
