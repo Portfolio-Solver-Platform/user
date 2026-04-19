@@ -76,6 +76,7 @@
               pkgs.nodejs_24
               kubernetes-helm
               yq-go
+              jq
             ];
           };
         };
