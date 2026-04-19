@@ -64,6 +64,7 @@
               kubernetes-helm
               (python3.withPackages (ps: with ps; [ requests ]))
               skaffold
+              uv
             ];
           };
 
