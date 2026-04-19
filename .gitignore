@@ -1,3 +1,6 @@
+.pre-commit-config.yaml
+.direnv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

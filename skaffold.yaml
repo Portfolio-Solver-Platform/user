@@ -8,15 +8,10 @@ build:
       context: .
   tagPolicy:
     gitCommit: {}
-
-
 profiles:
   - name: dev
     activation:
       - command: dev
-    build:
-      local:
-        push: false
     deploy:
       helm:
         releases:
@@ -25,35 +20,7 @@ profiles:
             namespace: psp
             setValueTemplates:
               image: "{{.IMAGE_FULLY_QUALIFIED}}"
-
-
-
-  - name: staging
-    build:
-      local:
-        push: false # TODO set to true
-      # optional: set your staging registry
-      # defaultRepo: "registry.example.com/staging"
-    deploy:
-      helm:
-        releases:
-          - name: user
-            chartPath: helm
-            namespace: psp
-            setValueTemplates:
-              image: "{{.IMAGE_FULLY_QUALIFIED}}"
-            valuesFiles:
-              - helm/values-prod.yaml
-            wait: true
-            upgradeOnChange: true
-
-
   - name: prod
-    build:
-      local:
-        push: true
-      # optional: set your prod registry
-      # defaultRepo: "registry.example.com/prod"
     deploy:
       helm:
         releases:
@@ -66,4 +33,3 @@ profiles:
               - helm/values-prod.yaml
             wait: true
             upgradeOnChange: true
-
