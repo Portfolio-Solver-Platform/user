@@ -1,0 +1,23 @@
+extends: default
+
+rules:
+  line-length: disable
+
+  document-start: disable
+
+  # Kubernetes is very strict about booleans. It only accepts 'true' or 'false'.
+  truthy:
+    allowed-values: ['true', 'false']
+
+  indentation:
+    spaces: 2
+    indent-sequences: true
+
+  comments:
+    require-starting-space: true
+    min-spaces-from-content: 1
+
+ignore: |
+  .git/
+  .github/
+  helm/templates/

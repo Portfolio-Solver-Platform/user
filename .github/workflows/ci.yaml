@@ -2,15 +2,31 @@ name: CI
 on:
   pull_request:
   workflow_call:
-
 permissions:
   contents: read
-
 jobs:
+  validate:
+    name: Validate configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@32cb6a5ae30bb0dfc996fa7baf8bf1ed28442fa4 # v3.17.3
+
+      - name: Install environment
+        run: nix develop .#checks
+
+      - name: Run checks
+        run: nix develop .#checks --command pre-commit run -a
+
   ci:
+    needs: validate
     permissions:
       contents: read
-
     uses: Portfolio-Solver-Platform/infrastructure/.github/workflows/python-ci.yaml@main
     with:
       code_audit_targets: "./src/"

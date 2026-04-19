@@ -35,7 +35,7 @@ probes:
   liveness:
     path: /healthz
     port: 8080
-    initialDelaySeconds: 30 
+    initialDelaySeconds: 30
     timeoutSeconds: 5
     periodSeconds: 10
     failureThreshold: 3
