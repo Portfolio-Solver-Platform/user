@@ -23,6 +23,12 @@
           config.allowUnfree = true;
         };
 
+        yamlExcludeList = [
+          "^helm/templates/"
+          "^.git/"
+          "^.github/"
+        ];
+
         preCommitCheck = git-hooks.lib.${system}.run {
           src = ./.;
           hooks = {
@@ -31,11 +37,11 @@
             actionlint.enable = true;
             shellcheck.enable = true;
             ruff.enable = true;
-            yamllint.enable = true;
-            markdownlint = {
+            yamllint = {
               enable = true;
-              args = [ "--fix" ];
+              excludes = yamlExcludeList;
             };
+            markdownlint.enable = true;
           };
         };
 
@@ -46,6 +52,17 @@
         ];
       in
       {
+        formatter = pkgs.writeShellScriptBin "format-all" ''
+          echo "=== Formatting Nix files... ==="
+          find . -type f -name "*.nix" -exec ${pkgs.nixfmt}/bin/nixfmt {} +
+
+          echo "=== Formatting Markdown files... ==="
+          ${pkgs.markdownlint}/bin/markdownlint --fix .
+
+          echo ""
+          echo "=== Done! ==="
+        '';
+
         devShells = {
           ci = pkgs.mkShell {
             inherit (preCommitCheck) shellHook;
@@ -58,11 +75,7 @@
               ciPackages
               ++ (with pkgs; [
                 kubernetes-helm
-                (python3.withPackages (
-                  ps: with ps; [
-                    requests
-                  ]
-                ))
+                (python3.withPackages (ps: with ps; [ requests ]))
                 skaffold
               ]);
           };
