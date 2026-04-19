@@ -5,7 +5,6 @@ rules:
 
   document-start: disable
 
-  # Kubernetes is very strict about booleans. It only accepts 'true' or 'false'.
   truthy:
     allowed-values: ['true', 'false']
 
