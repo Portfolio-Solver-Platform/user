@@ -1,15 +1,30 @@
 name: CI
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
   workflow_call:
+
 permissions:
   contents: read
+
 jobs:
+  validate-pr-title:
+    name: Validate PR Title
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Check PR title for Conventional Commits format
+        if: github.event_name == 'pull_request'
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   validate:
     name: Validate configuration
+    needs: [validate-pr-title]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -24,7 +39,7 @@ jobs:
         run: nix develop .#checks --command pre-commit run -a
 
   ci:
-    needs: validate
+    needs: [validate, validate-pr-title]
     permissions:
       contents: read
     uses: Portfolio-Solver-Platform/infrastructure/.github/workflows/python-ci.yaml@main
