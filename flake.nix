@@ -44,6 +44,25 @@
               excludes = yamlExcludeList;
             };
             markdownlint.enable = true;
+
+            helm-lint = {
+              enable = true;
+              name = "Helm Lint";
+              pass_filenames = false;
+              entry =
+                let
+                  packages = with pkgs; [
+                    kubernetes-helm
+                  ];
+
+                  wrapper = pkgs.writeShellScript "helm-lint-wrapper" ''
+                    export PATH="${pkgs.lib.makeBinPath packages}:$PATH"
+
+                    exec ${pkgs.bash}/bin/bash -c "helm lint ./helm/"
+                  '';
+                in
+                builtins.toString wrapper;
+            };
           };
         };
       in
