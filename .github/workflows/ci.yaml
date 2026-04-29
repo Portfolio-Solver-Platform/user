@@ -42,6 +42,6 @@ jobs:
     needs: [validate, validate-pr-title]
     permissions:
       contents: read
-    uses: Portfolio-Solver-Platform/infrastructure/.github/workflows/python-ci.yaml@main
+    uses: Portfolio-Solver-Platform/infrastructure/.github/workflows/python-ci.yaml@4d3c9fd822e3e8157a06cc3a09f1902ebddee0aa # main
     with:
       code_audit_targets: "./src/"
